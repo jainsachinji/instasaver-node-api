@@ -1,10 +1,13 @@
 const express = require('express');
 const axios = require('axios');
+const cors = require('cors');
+
 const app = express();
 
+app.use(cors());
 app.use(express.json());
 
-// Root Route - Server Check
+// Root Route - Server Health Check
 app.get('/', (req, res) => {
   res.send('Instasaver API is running successfully!');
 });
@@ -25,7 +28,7 @@ app.get('/download', async (req, res) => {
       params: { url: videoUrl },
       headers: {
         'x-rapidapi-host': 'instagram-downloader-scraper-reels-igtv-posts-stories.p.rapidapi.com',
-        'x-rapidapi-key': process.env.RAPIDAPI_KEY || 'YOUR_RAPIDAPI_KEY_HERE'
+        'x-rapidapi-key': '4f90533d66msh27985cd1270197dp1dd37ejsn7125327ea0ef'
       }
     });
 
