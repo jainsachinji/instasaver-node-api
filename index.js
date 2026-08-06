@@ -7,7 +7,7 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-// Root Route
+// Root Route - Server Check
 app.get('/', (req, res) => {
   res.send('Instasaver API is running successfully!');
 });
@@ -30,7 +30,7 @@ app.get('/download', async (req, res) => {
       url: videoUrl
     },
     headers: {
-      'x-rapidapi-key': '4f90533d66msh27985cd1270197dp1dd37ejsn7125327ea0ef',
+      'x-rapidapi-key': '4f90533d66msh27985cd1270197dp1ddjsn93f5ad6f406c',
       'x-rapidapi-host': 'instagram-downloader-scraper-reels-igtv-posts-stories.p.rapidapi.com'
     }
   };
