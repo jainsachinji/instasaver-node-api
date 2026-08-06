@@ -7,7 +7,7 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-// Root Route - Server Health Check
+// Root Route
 app.get('/', (req, res) => {
   res.send('Instasaver API is running successfully!');
 });
@@ -23,23 +23,29 @@ app.get('/download', async (req, res) => {
     });
   }
 
-  try {
-    const response = await axios.get('https://instagram-downloader-scraper-reels-igtv-posts-stories.p.rapidapi.com/scraper', {
-      params: { url: videoUrl },
-      headers: {
-        'x-rapidapi-host': 'instagram-downloader-scraper-reels-igtv-posts-stories.p.rapidapi.com',
-        'x-rapidapi-key': '4f90533d66msh27985cd1270197dp1dd37ejsn7125327ea0ef'
-      }
-    });
+  const options = {
+    method: 'GET',
+    url: 'https://instagram-downloader-scraper-reels-igtv-posts-stories.p.rapidapi.com/scraper',
+    params: {
+      url: videoUrl
+    },
+    headers: {
+      'x-rapidapi-key': '4f90533d66msh27985cd1270197dp1dd37ejsn7125327ea0ef',
+      'x-rapidapi-host': 'instagram-downloader-scraper-reels-igtv-posts-stories.p.rapidapi.com'
+    }
+  };
 
+  try {
+    const response = await axios.request(options);
     res.json({
       status: true,
       data: response.data
     });
   } catch (error) {
-    res.status(500).json({
+    res.status(error.response?.status || 500).json({
       status: false,
-      message: error.message
+      message: error.message,
+      error_details: error.response?.data || null
     });
   }
 });
