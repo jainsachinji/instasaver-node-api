@@ -1,0 +1,15 @@
+{
+  "name": "instasaver-node-api",
+  "version": "1.0.0",
+  "description": "Instagram Downloader Backend",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js"
+  },
+  "dependencies": {
+    "express": "^4.21.2",
+    "axios": "^1.11.0",
+    "cors": "^2.8.5",
+    "dotenv": "^17.2.1"
+  }
+}
