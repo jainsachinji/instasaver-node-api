@@ -1,5 +1,5 @@
 const express = require('express');
-const axios = require('axios');
+const { igdl } = require('btch-downloader');
 const cors = require('cors');
 
 const app = express();
@@ -7,12 +7,12 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-// Root Route - Server Check
+// Main Health Check Route
 app.get('/', (req, res) => {
   res.send('Instasaver API is running successfully!');
 });
 
-// Download Route
+// Download Route (No RapidAPI Needed)
 app.get('/download', async (req, res) => {
   const videoUrl = req.query.url;
 
@@ -23,29 +23,25 @@ app.get('/download', async (req, res) => {
     });
   }
 
-  const options = {
-    method: 'GET',
-    url: 'https://instagram-downloader-scraper-reels-igtv-posts-stories.p.rapidapi.com/scraper',
-    params: {
-      url: videoUrl
-    },
-    headers: {
-      'x-rapidapi-key': '4f90533d66msh27985cd1270197dp1ddjsn93f5ad6f406c',
-      'x-rapidapi-host': 'instagram-downloader-scraper-reels-igtv-posts-stories.p.rapidapi.com'
-    }
-  };
-
   try {
-    const response = await axios.request(options);
-    res.json({
-      status: true,
-      data: response.data
-    });
+    const data = await igdl(videoUrl);
+
+    if (data && data.length > 0) {
+      return res.json({
+        status: true,
+        download_url: data[0].url || data[0],
+        data: data
+      });
+    } else {
+      return res.status(404).json({
+        status: false,
+        message: 'Could not extract video link. Make sure the account is public.'
+      });
+    }
   } catch (error) {
-    res.status(error.response?.status || 500).json({
+    res.status(500).json({
       status: false,
-      message: error.message,
-      error_details: error.response?.data || null
+      message: error.message
     });
   }
 });
